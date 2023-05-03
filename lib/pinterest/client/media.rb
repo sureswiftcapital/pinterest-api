@@ -12,10 +12,10 @@ module Pinterest
         upload_id, upload_url, upload_parameters = register_upload(options)
 
         video_url = options.delete(:video_url)
-        media = open(video_url, 'rb')
+        media = URI.open(video_url, 'rb')
 
         upload_resp = connection.send(:post) do |req|
-          req.path = URI.encode(File.join(upload_url, ''))
+          req.path = File.join(upload_url, '')
           req.headers['Content-Type'] = "multipart/form-data"
           req.body = upload_parameters.merge(
             file: Faraday::UploadIO.new(media, content_type(media))
